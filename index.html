@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!-- This line makes the page fit phone screens -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Deccan Brew Café | Hyderabad</title>
+  <meta name="description" content="Deccan Brew Café - a fictional Hyderabad café serving chai, coffee and bakes.">
+
+  <style>
+    /* ===== 1. COLORS: change these to restyle the whole site ===== */
+    :root {
+      --cream: #fbf3e4;        /* page background */
+      --cream-dark: #f2e4c9;   /* alternate sections */
+      --brown: #3b2416;        /* main text */
+      --terracotta: #c4623a;   /* buttons and accents */
+      --terracotta-dark: #a24a27;
+      --white: #fffaf0;
+    }
+
+    /* ===== 2. BASIC RESET ===== */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; scroll-padding-top: 70px; }
+    body {
+      font-family: Georgia, "Times New Roman", serif;
+      background: var(--cream);
+      color: var(--brown);
+      line-height: 1.6;
+    }
+    h1, h2, h3 { line-height: 1.2; }
+    a { color: inherit; }
+    section { padding: 60px 20px; }
+    .container { max-width: 1000px; margin: 0 auto; }
+    .section-title { font-size: 2rem; text-align: center; margin-bottom: 8px; }
+    .section-sub { text-align: center; margin-bottom: 32px; opacity: .8; }
+
+    /* ===== 3. BUTTONS ===== */
+    .btn {
+      display: inline-block;
+      padding: 14px 26px;
+      border-radius: 50px;
+      background: var(--terracotta);
+      color: #fff;
+      text-decoration: none;
+      font-family: Arial, sans-serif;
+      font-weight: bold;
+      border: 2px solid var(--terracotta);
+    }
+    .btn:hover { background: var(--terracotta-dark); }
+    .btn-outline { background: transparent; color: var(--cream); border-color: var(--cream); }
+    .btn-outline:hover { background: var(--cream); color: var(--brown); }
+
+    /* ===== 4. HEADER + NAVIGATION ===== */
+    header {
+      position: fixed; top: 0; left: 0; right: 0;
+      background: var(--brown);
+      color: var(--cream);
+      z-index: 10;
+    }
+    .nav-bar {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 14px 20px;
+      max-width: 1000px; margin: 0 auto;
+    }
+    .logo { font-size: 1.2rem; font-weight: bold; text-decoration: none; }
+    .logo span { color: #e8a07e; }
+    .menu-btn {
+      background: none; border: 2px solid var(--cream); color: var(--cream);
+      font-size: 1.4rem; padding: 2px 12px; border-radius: 8px; cursor: pointer;
+    }
+    nav ul {
+      list-style: none;
+      display: none;               /* hidden on phones until button is tapped */
+      flex-direction: column;
+      background: var(--brown);
+      padding: 0 20px 16px;
+    }
+    nav ul.open { display: flex; }  /* JavaScript adds "open" */
+    nav a { display: block; padding: 12px 0; text-decoration: none; font-family: Arial, sans-serif; }
+    nav a:hover { color: #e8a07e; }
+
+    /* ===== 5. HERO ===== */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      text-align: center;
+      padding: 100px 20px 60px;
+      color: var(--cream);
+      /* Dark brown gradient. To use a photo: see the guide, "Change the hero image" */
+      background: linear-gradient(160deg, #2a170d 0%, #5a3520 60%, #8a4a2b 100%);
+    }
+    .hero svg { width: 150px; height: 150px; margin-bottom: 20px; }
+    .hero .tag { letter-spacing: 3px; text-transform: uppercase; font-size: .8rem; color: #e8a07e; font-family: Arial, sans-serif; }
+    .hero h1 { font-size: 2.6rem; margin: 10px 0 14px; }
+    .hero p { max-width: 460px; margin-bottom: 28px; opacity: .9; }
+    .hero-buttons { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+
+    /* ===== 6. MENU CARDS ===== */
+    #menu { background: var(--cream); }
+    .menu-grid { display: grid; grid-template-columns: 1fr; gap: 18px; }
+    .card {
+      background: var(--white);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 14px rgba(59, 36, 22, .12);
+    }
+    .card-img {
+      height: 130px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 3.5rem;
+      background: linear-gradient(135deg, #e8b48f, var(--terracotta));
+    }
+    .card-img img { width: 100%; height: 100%; object-fit: cover; }
+    .card-body { padding: 16px; }
+    .card-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+    .card h3 { font-size: 1.15rem; }
+    .price { color: var(--terracotta); font-weight: bold; font-family: Arial, sans-serif; white-space: nowrap; }
+    .card p { font-size: .95rem; margin-top: 6px; opacity: .85; }
+
+    /* ===== 7. ABOUT ===== */
+    #about { background: var(--cream-dark); }
+    .about-text { max-width: 640px; margin: 0 auto; text-align: center; }
+    .about-text p { margin-bottom: 14px; }
+    .features { display: grid; grid-template-columns: 1fr; gap: 14px; margin-top: 28px; }
+    .feature { background: var(--cream); padding: 18px; border-radius: 14px; text-align: center; border-bottom: 4px solid var(--terracotta); }
+    .feature span { font-size: 2rem; }
+
+    /* ===== 8. HOURS + LOCATION ===== */
+    .info-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+    .info-box { background: var(--white); padding: 24px; border-radius: 16px; box-shadow: 0 4px 14px rgba(59, 36, 22, .1); }
+    .info-box h3 { margin-bottom: 14px; color: var(--terracotta); }
+    .hours-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #d8c3a0; font-family: Arial, sans-serif; }
+    .map-placeholder {
+      margin-top: 14px; height: 130px; border-radius: 12px;
+      background: var(--cream-dark); border: 2px dashed var(--terracotta);
+      display: flex; align-items: center; justify-content: center; text-align: center; padding: 10px;
+      font-family: Arial, sans-serif; font-size: .9rem;
+    }
+
+    /* ===== 9. WHATSAPP SECTION ===== */
+    #enquire { background: var(--brown); color: var(--cream); text-align: center; }
+    #enquire p { max-width: 460px; margin: 0 auto 24px; opacity: .9; }
+    .btn-whatsapp { background: #25d366; border-color: #25d366; color: #0b2e18; }
+    .btn-whatsapp:hover { background: #1ebe5a; }
+
+    /* ===== 10. FOOTER ===== */
+    footer { background: #24150c; color: var(--cream); padding: 40px 20px 20px; font-family: Arial, sans-serif; font-size: .95rem; }
+    .footer-grid { display: grid; grid-template-columns: 1fr; gap: 24px; max-width: 1000px; margin: 0 auto; }
+    footer h4 { color: #e8a07e; margin-bottom: 8px; }
+    footer a { text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+    .copy { text-align: center; margin-top: 28px; padding-top: 16px; border-top: 1px solid #4a3426; font-size: .8rem; opacity: .7; }
+
+    /* ===== 11. BIGGER SCREENS (tablet and desktop) ===== */
+    @media (min-width: 700px) {
+      .menu-btn { display: none; }
+      nav ul { display: flex; flex-direction: row; gap: 24px; padding: 0; background: none; }
+      .menu-grid { grid-template-columns: repeat(2, 1fr); }
+      .features, .footer-grid { grid-template-columns: repeat(3, 1fr); }
+      .info-grid { grid-template-columns: repeat(2, 1fr); }
+      .hero h1 { font-size: 3.6rem; }
+    }
+    @media (min-width: 1000px) {
+      .menu-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ===== HEADER / NAVIGATION ===== -->
+  <header>
+    <div class="nav-bar">
+      <a href="#home" class="logo">Deccan <span>Brew</span> Café</a>
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu">☰</button>
+      <nav>
+        <ul id="navList">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#menu">Menu</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#visit">Visit</a></li>
+          <li><a href="#enquire">Enquire</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- ===== HERO ===== -->
+    <section class="hero" id="home">
+      <!-- A simple coffee cup drawn with SVG shapes (no image file needed) -->
+      <svg viewBox="0 0 120 120" aria-hidden="true">
+        <path d="M40 22 q-6 8 0 16 M60 18 q-6 8 0 16 M80 22 q-6 8 0 16" stroke="#e8a07e" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <path d="M22 48 h66 v22 a26 26 0 0 1 -26 26 h-14 a26 26 0 0 1 -26 -26 z" fill="#c4623a"/>
+        <path d="M88 54 h8 a12 12 0 0 1 0 24 h-10" stroke="#c4623a" stroke-width="7" fill="none"/>
+        <ellipse cx="55" cy="48" rx="33" ry="5" fill="#3b2416"/>
+        <rect x="20" y="104" width="76" height="6" rx="3" fill="#fbf3e4" opacity=".6"/>
+      </svg>
+      <p class="tag">Hyderabad · Since 2015 (fictional)</p>
+      <h1>Deccan Brew Café</h1>
+      <p>Slow-brewed coffee, Irani chai and fresh bakes, served in the heart of Hyderabad.</p>
+      <div class="hero-buttons">
+        <a href="#menu" class="btn">See the Menu</a>
+        <a href="#visit" class="btn btn-outline">Find Us</a>
+      </div>
+    </section>
+
+    <!-- ===== MENU ===== -->
+    <section id="menu">
+      <div class="container">
+        <h2 class="section-title">Our Menu</h2>
+        <p class="section-sub">Sample items and prices (fictional)</p>
+
+        <div class="menu-grid">
+
+          <!-- One card. Copy this whole block to add a new menu item -->
+          <article class="card">
+            <div class="card-img">🍵</div>
+            <div class="card-body">
+              <div class="card-top"><h3>Irani Chai</h3><span class="price">₹40</span></div>
+              <p>Rich, creamy Hyderabadi-style tea brewed slowly.</p>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-img">☕</div>
+            <div class="card-body">
+              <div class="card-top"><h3>Filter Coffee</h3><span class="price">₹60</span></div>
+              <p>Strong South Indian decoction with frothy milk.</p>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-img">🧊</div>
+            <div class="card-body">
+              <div class="card-top"><h3>Deccan Cold Brew</h3><span class="price">₹140</span></div>
+              <p>Steeped for 12 hours, served over ice.</p>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-img">🍪</div>
+            <div class="card-body">
+              <div class="card-top"><h3>Osmania Biscuits</h3><span class="price">₹50</span></div>
+              <p>Buttery sweet-salty biscuits, perfect with chai.</p>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-img">🍞</div>
+            <div class="card-body">
+              <div class="card-top"><h3>Bun Maska</h3><span class="price">₹70</span></div>
+              <p>Soft bun with fresh butter, a café classic.</p>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-img">🥐</div>
+            <div class="card-body">
+              <div class="card-top"><h3>Veg Puff</h3><span class="price">₹45</span></div>
+              <p>Flaky pastry filled with spiced vegetables.</p>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-img">🍫</div>
+            <div class="card-body">
+              <div class="card-top"><h3>Fudgy Brownie</h3><span class="price">₹120</span></div>
+              <p>Warm chocolate brownie with a dusting of cocoa.</p>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-img">🥛</div>
+            <div class="card-body">
+              <div class="card-top"><h3>Zafrani Latte</h3><span class="price">₹150</span></div>
+              <p>Espresso with milk and a hint of saffron.</p>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== ABOUT ===== -->
+    <section id="about">
+      <div class="container">
+        <h2 class="section-title">Our Story</h2>
+        <div class="about-text">
+          <p>Deccan Brew Café is a fictional neighbourhood café imagined for this portfolio project. It blends the warmth of old Hyderabad chai culture with the calm of a modern coffee house.</p>
+          <p>We picture a cosy space for long conversations, quiet reading and a good cup in your hand.</p>
+        </div>
+        <div class="features">
+          <div class="feature"><span>🌱</span><h3>Fresh Ingredients</h3><p>Made fresh every morning.</p></div>
+          <div class="feature"><span>☕</span><h3>Slow Brewed</h3><p>Patience in every cup.</p></div>
+          <div class="feature"><span>🛋️</span><h3>Cosy Space</h3><p>Comfortable seats and soft music.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== HOURS + LOCATION ===== -->
+    <section id="visit">
+      <div class="container">
+        <h2 class="section-title">Visit Us</h2>
+        <p class="section-sub">We'd love to see you</p>
+        <div class="info-grid">
+          <div class="info-box">
+            <h3>Opening Hours</h3>
+            <div class="hours-row"><span>Monday – Friday</span><span>7:00 AM – 10:00 PM</span></div>
+            <div class="hours-row"><span>Saturday</span><span>7:00 AM – 11:00 PM</span></div>
+            <div class="hours-row"><span>Sunday</span><span>8:00 AM – 11:00 PM</span></div>
+          </div>
+          <div class="info-box">
+            <h3>Location</h3>
+            <p>Road No. 00, Banjara Hills,<br>Hyderabad, Telangana 500000<br><em>(placeholder address)</em></p>
+            <div class="map-placeholder">📍 Map placeholder: replace with your real Google Maps embed later</div>
+            <p style="margin-top:14px">
+              <a class="btn" href="https://www.google.com/maps/search/?api=1&query=Banjara+Hills+Hyderabad" target="_blank" rel="noopener">Open in Maps</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== WHATSAPP ENQUIRY ===== -->
+    <section id="enquire">
+      <div class="container">
+        <h2 class="section-title">Questions or Bookings?</h2>
+        <p>Message us on WhatsApp about tables, events or orders.</p>
+        <!-- Replace 910000000000 with a real number: country code + number, no + or spaces -->
+        <a class="btn btn-whatsapp" id="waBtn"
+           href="https://wa.me/910000000000?text=Hello%20Deccan%20Brew%20Caf%C3%A9%2C%20I%20have%20an%20enquiry."
+           target="_blank" rel="noopener">💬 Chat on WhatsApp</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <h4>Deccan Brew Café</h4>
+        <p>A fictional café created for a web development portfolio.</p>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <p>📞 <a href="tel:+910000000000">+91 00000 00000</a></p>
+        <p>✉️ <a href="mailto:hello@deccanbrew.example">hello@deccanbrew.example</a></p>
+        <p>📍 Banjara Hills, Hyderabad</p>
+      </div>
+      <div>
+        <h4>Quick Links</h4>
+        <p><a href="#menu">Menu</a></p>
+        <p><a href="#about">About</a></p>
+        <p><a href="#visit">Visit</a></p>
+        <p><a href="#home">Back to top ↑</a></p>
+      </div>
+    </div>
+    <p class="copy">© <span id="year">2026</span> Deccan Brew Café. Fictional business for demonstration only.</p>
+  </footer>
+
+  <script>
+    // Get the menu button and the list of links
+    const menuBtn = document.getElementById("menuBtn");
+    const navList = document.getElementById("navList");
+
+    // Tapping the ☰ button shows or hides the menu
+    menuBtn.addEventListener("click", function () {
+      navList.classList.toggle("open");
+    });
+
+    // Tapping any link closes the menu again
+    navList.querySelectorAll("a").forEach(function (link) {
+      link.addEventListener("click", function () {
+        navList.classList.remove("open");
+      });
+    });
+
+    // Put the current year in the footer automatically
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+
+</body>
+</html>
