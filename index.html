@@ -1,384 +1,251 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <!-- This line makes the page fit phone screens -->
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Deccan Brew Café | Hyderabad</title>
-  <meta name="description" content="Deccan Brew Café - a fictional Hyderabad café serving chai, coffee and bakes.">
-
-  <style>
-    /* ===== 1. COLORS: change these to restyle the whole site ===== */
-    :root {
-      --cream: #fbf3e4;        /* page background */
-      --cream-dark: #f2e4c9;   /* alternate sections */
-      --brown: #3b2416;        /* main text */
-      --terracotta: #c4623a;   /* buttons and accents */
-      --terracotta-dark: #a24a27;
-      --white: #fffaf0;
-    }
-
-    /* ===== 2. BASIC RESET ===== */
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; scroll-padding-top: 70px; }
-    body {
-      font-family: Georgia, "Times New Roman", serif;
-      background: var(--cream);
-      color: var(--brown);
-      line-height: 1.6;
-    }
-    h1, h2, h3 { line-height: 1.2; }
-    a { color: inherit; }
-    section { padding: 60px 20px; }
-    .container { max-width: 1000px; margin: 0 auto; }
-    .section-title { font-size: 2rem; text-align: center; margin-bottom: 8px; }
-    .section-sub { text-align: center; margin-bottom: 32px; opacity: .8; }
-
-    /* ===== 3. BUTTONS ===== */
-    .btn {
-      display: inline-block;
-      padding: 14px 26px;
-      border-radius: 50px;
-      background: var(--terracotta);
-      color: #fff;
-      text-decoration: none;
-      font-family: Arial, sans-serif;
-      font-weight: bold;
-      border: 2px solid var(--terracotta);
-    }
-    .btn:hover { background: var(--terracotta-dark); }
-    .btn-outline { background: transparent; color: var(--cream); border-color: var(--cream); }
-    .btn-outline:hover { background: var(--cream); color: var(--brown); }
-
-    /* ===== 4. HEADER + NAVIGATION ===== */
-    header {
-      position: fixed; top: 0; left: 0; right: 0;
-      background: var(--brown);
-      color: var(--cream);
-      z-index: 10;
-    }
-    .nav-bar {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 14px 20px;
-      max-width: 1000px; margin: 0 auto;
-    }
-    .logo { font-size: 1.2rem; font-weight: bold; text-decoration: none; }
-    .logo span { color: #e8a07e; }
-    .menu-btn {
-      background: none; border: 2px solid var(--cream); color: var(--cream);
-      font-size: 1.4rem; padding: 2px 12px; border-radius: 8px; cursor: pointer;
-    }
-    nav ul {
-      list-style: none;
-      display: none;               /* hidden on phones until button is tapped */
-      flex-direction: column;
-      background: var(--brown);
-      padding: 0 20px 16px;
-    }
-    nav ul.open { display: flex; }  /* JavaScript adds "open" */
-    nav a { display: block; padding: 12px 0; text-decoration: none; font-family: Arial, sans-serif; }
-    nav a:hover { color: #e8a07e; }
-
-    /* ===== 5. HERO ===== */
-    .hero {
-      min-height: 100vh;
-      display: flex; flex-direction: column; justify-content: center; align-items: center;
-      text-align: center;
-      padding: 100px 20px 60px;
-      color: var(--cream);
-      /* Dark brown gradient. To use a photo: see the guide, "Change the hero image" */
-      background: linear-gradient(160deg, #2a170d 0%, #5a3520 60%, #8a4a2b 100%);
-    }
-    .hero svg { width: 150px; height: 150px; margin-bottom: 20px; }
-    .hero .tag { letter-spacing: 3px; text-transform: uppercase; font-size: .8rem; color: #e8a07e; font-family: Arial, sans-serif; }
-    .hero h1 { font-size: 2.6rem; margin: 10px 0 14px; }
-    .hero p { max-width: 460px; margin-bottom: 28px; opacity: .9; }
-    .hero-buttons { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
-
-    /* ===== 6. MENU CARDS ===== */
-    #menu { background: var(--cream); }
-    .menu-grid { display: grid; grid-template-columns: 1fr; gap: 18px; }
-    .card {
-      background: var(--white);
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 4px 14px rgba(59, 36, 22, .12);
-    }
-    .card-img {
-      height: 130px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 3.5rem;
-      background: linear-gradient(135deg, #e8b48f, var(--terracotta));
-    }
-    .card-img img { width: 100%; height: 100%; object-fit: cover; }
-    .card-body { padding: 16px; }
-    .card-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
-    .card h3 { font-size: 1.15rem; }
-    .price { color: var(--terracotta); font-weight: bold; font-family: Arial, sans-serif; white-space: nowrap; }
-    .card p { font-size: .95rem; margin-top: 6px; opacity: .85; }
-
-    /* ===== 7. ABOUT ===== */
-    #about { background: var(--cream-dark); }
-    .about-text { max-width: 640px; margin: 0 auto; text-align: center; }
-    .about-text p { margin-bottom: 14px; }
-    .features { display: grid; grid-template-columns: 1fr; gap: 14px; margin-top: 28px; }
-    .feature { background: var(--cream); padding: 18px; border-radius: 14px; text-align: center; border-bottom: 4px solid var(--terracotta); }
-    .feature span { font-size: 2rem; }
-
-    /* ===== 8. HOURS + LOCATION ===== */
-    .info-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
-    .info-box { background: var(--white); padding: 24px; border-radius: 16px; box-shadow: 0 4px 14px rgba(59, 36, 22, .1); }
-    .info-box h3 { margin-bottom: 14px; color: var(--terracotta); }
-    .hours-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #d8c3a0; font-family: Arial, sans-serif; }
-    .map-placeholder {
-      margin-top: 14px; height: 130px; border-radius: 12px;
-      background: var(--cream-dark); border: 2px dashed var(--terracotta);
-      display: flex; align-items: center; justify-content: center; text-align: center; padding: 10px;
-      font-family: Arial, sans-serif; font-size: .9rem;
-    }
-
-    /* ===== 9. WHATSAPP SECTION ===== */
-    #enquire { background: var(--brown); color: var(--cream); text-align: center; }
-    #enquire p { max-width: 460px; margin: 0 auto 24px; opacity: .9; }
-    .btn-whatsapp { background: #25d366; border-color: #25d366; color: #0b2e18; }
-    .btn-whatsapp:hover { background: #1ebe5a; }
-
-    /* ===== 10. FOOTER ===== */
-    footer { background: #24150c; color: var(--cream); padding: 40px 20px 20px; font-family: Arial, sans-serif; font-size: .95rem; }
-    .footer-grid { display: grid; grid-template-columns: 1fr; gap: 24px; max-width: 1000px; margin: 0 auto; }
-    footer h4 { color: #e8a07e; margin-bottom: 8px; }
-    footer a { text-decoration: none; }
-    footer a:hover { text-decoration: underline; }
-    .copy { text-align: center; margin-top: 28px; padding-top: 16px; border-top: 1px solid #4a3426; font-size: .8rem; opacity: .7; }
-
-    /* ===== 11. BIGGER SCREENS (tablet and desktop) ===== */
-    @media (min-width: 700px) {
-      .menu-btn { display: none; }
-      nav ul { display: flex; flex-direction: row; gap: 24px; padding: 0; background: none; }
-      .menu-grid { grid-template-columns: repeat(2, 1fr); }
-      .features, .footer-grid { grid-template-columns: repeat(3, 1fr); }
-      .info-grid { grid-template-columns: repeat(2, 1fr); }
-      .hero h1 { font-size: 3.6rem; }
-    }
-    @media (min-width: 1000px) {
-      .menu-grid { grid-template-columns: repeat(4, 1fr); }
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SmileCare Dental Clinic | Dentist in Hyderabad</title>
+<meta name="description" content="SmileCare Dental Clinic in Hyderabad: general dentistry, teeth whitening, dental implants, braces, root canal and pediatric dental care. Request an appointment today.">
+<style>
+:root{--bg:#fff;--soft:#f0f9fb;--mint:#e6f6f3;--text:#33495a;--navy:#0b3c5d;--head:#0b3c5d;--teal:#0e8f9b;--card:#fff;--line:#dbeaee;--shadow:0 8px 28px rgba(11,60,93,.09);color-scheme:light;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a1a24;--soft:#0e2230;--mint:#0f2a32;--text:#b9ccd6;--head:#eaf5f9;--teal:#2bbac7;--card:#12303f;--line:#1f4254;--shadow:0 8px 28px rgba(0,0,0,.35);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0a1a24;--soft:#0e2230;--mint:#0f2a32;--text:#b9ccd6;--head:#eaf5f9;--teal:#2bbac7;--card:#12303f;--line:#1f4254;--shadow:0 8px 28px rgba(0,0,0,.35);color-scheme:dark}
+html{scroll-behavior:smooth;scroll-padding-top:calc(76px + env(safe-area-inset-top,0px));height:auto}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:60}
+h1,h2,h3{color:var(--head);line-height:1.15;margin:0 0 .5em;font-family:Georgia,"Times New Roman",serif}
+h1{font-size:clamp(2.1rem,6vw,3.5rem)}h2{font-size:clamp(1.7rem,4vw,2.4rem)}h3{font-size:1.15rem;font-family:system-ui,sans-serif;font-weight:650}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1140px;margin:0 auto;padding:0 20px}
+section{padding:72px 0}
+.eyebrow{display:inline-block;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);font-weight:700;margin-bottom:10px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 24px;border-radius:999px;font-weight:600;border:2px solid var(--teal);cursor:pointer;font-size:1rem;transition:.2s;font-family:inherit}
+.btn.p{background:var(--teal);color:#fff}.btn.p:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(14,143,155,.35)}
+.btn.s{background:transparent;color:var(--head)}.btn.s:hover{background:var(--mint)}
+.ico{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+/* nav */
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--bg);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:68px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--head);line-height:1.1}
+.logo small{display:block;font-weight:500;font-size:.7rem;color:var(--teal)}
+.logo .mark{width:40px;height:40px;border-radius:12px;background:var(--teal);color:#fff;display:grid;place-items:center}
+nav ul{display:flex;gap:26px;list-style:none;margin:0;padding:0;font-size:.95rem;font-weight:500}
+nav a:hover{color:var(--teal)}
+.burger{display:none;background:none;border:0;color:var(--head);padding:8px}
+@media(max-width:900px){.burger{display:block}.nav .btn{display:none}
+nav{position:absolute;left:0;right:0;top:68px;background:var(--bg);border-bottom:1px solid var(--line);display:none;padding:14px 20px 20px}
+nav.open{display:block}nav ul{flex-direction:column;gap:6px}nav li a{display:block;padding:10px 0}
+nav .btn{display:inline-flex;margin-top:10px}}
+@media(min-width:901px){nav .btn.m{display:none}}
+/* hero */
+.hero{background:linear-gradient(160deg,var(--soft),var(--bg));padding:48px 0 64px}
+.hero .wrap{display:grid;gap:36px;align-items:center}
+@media(min-width:900px){.hero .wrap{grid-template-columns:1.05fr 1fr}}
+.pill{display:inline-block;background:var(--mint);color:var(--teal);border-radius:99px;padding:4px 14px;font-size:.8rem;font-weight:600;margin-bottom:16px}
+.hero h1 em{font-style:normal;color:var(--teal)}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin:24px 0}
+.trust{display:flex;flex-wrap:wrap;gap:10px 22px;font-size:.92rem;font-weight:600;color:var(--head)}
+.trust span{display:flex;align-items:center;gap:8px}.trust .ico{color:var(--teal);width:20px;height:20px}
+.photo{position:relative;border-radius:200px 28px 28px 28px;overflow:hidden;aspect-ratio:1/1;background:linear-gradient(145deg,#bfe9e8,#e6f6f3 55%,#cfe3f3);display:grid;place-items:center;box-shadow:var(--shadow)}
+.photo svg.t{width:46%;color:#fff;filter:drop-shadow(0 10px 24px rgba(11,60,93,.25))}
+.photo .tag{position:absolute;bottom:14px;left:14px;right:14px;background:rgba(255,255,255,.92);color:#0b3c5d;border-radius:14px;padding:8px 12px;font-size:.78rem;text-align:center}
+.float{position:absolute;left:-8px;top:30%;background:var(--card);border-radius:16px;padding:12px 16px;box-shadow:var(--shadow);font-size:.85rem;max-width:190px;display:none}
+@media(min-width:900px){.float{display:block}}
+/* services */
+.dark{background:var(--navy);color:#cfe3ee}
+.dark h2{color:#fff}.dark .eyebrow{color:#7fe0e6}
+.center{text-align:center;max-width:640px;margin:0 auto 40px}
+.grid{display:grid;gap:18px}
+.g4{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.card{background:var(--card);border-radius:20px;padding:24px;box-shadow:var(--shadow);transition:.25s;border:1px solid var(--line)}
+.card:hover{transform:translateY(-5px)}
+.card p{margin:.3em 0 1em;font-size:.93rem}
+.ci{width:48px;height:48px;border-radius:14px;background:var(--mint);color:var(--teal);display:grid;place-items:center;margin-bottom:14px}
+.dark .card:nth-child(even){background:#0f4d6e;border-color:#1b6a8f;color:#cfe3ee}
+.dark .card:nth-child(even) h3{color:#fff}.dark .card:nth-child(even) .ci{background:#168394;color:#fff}
+.more{display:inline-flex;gap:6px;align-items:center;font-weight:600;color:var(--teal);font-size:.92rem}
+.dark .card:nth-child(even) .more{color:#7fe0e6}
+/* about */
+.two{display:grid;gap:36px;align-items:center}
+@media(min-width:900px){.two{grid-template-columns:1fr 1fr}}
+.photo.sq{border-radius:28px;aspect-ratio:4/3}
+.stats{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px}
+.stat{background:var(--soft);border:1px solid var(--line);border-radius:14px;padding:12px 18px;font-size:.88rem}
+.stat b{display:block;color:var(--head)}
+.note{font-size:.8rem;background:#fff6dc;color:#6b5200;border-radius:8px;padding:6px 10px;display:inline-block;margin:8px 0}
+/* team */
+.soft{background:var(--soft)}
+.team .card{text-align:center}
+.av{width:96px;height:96px;border-radius:50%;margin:0 auto 14px;background:var(--mint);display:grid;place-items:center;color:var(--teal)}
+.av .ico{width:44px;height:44px}
+.sp{color:var(--teal);font-weight:600;font-size:.88rem}
+/* why */
+.g3{grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.why{display:flex;gap:14px}.why .ci{margin:0;flex:none;border-radius:50%}
+.why p{margin:.2em 0 0;font-size:.93rem}
+/* reviews */
+.mintbg{background:var(--mint)}
+.q{font-style:italic}
+.q .who{font-style:normal;font-weight:650;color:var(--head);margin-top:12px;display:block}
+.q .who small{display:block;font-weight:400;color:var(--text)}
+/* booking */
+form{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:26px;box-shadow:var(--shadow);display:grid;gap:14px}
+.row{display:grid;gap:14px}@media(min-width:560px){.row{grid-template-columns:1fr 1fr}}
+label{font-weight:600;font-size:.88rem;color:var(--head);display:block;margin-bottom:4px}
+input,select,textarea{width:100%;padding:12px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);color:var(--text);font:inherit}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--teal);border-color:var(--teal)}
+.err{color:#c62828;font-size:.8rem;min-height:1em;display:block}
+@media(prefers-color-scheme:dark){.err{color:#ff8a80}}
+.msg{display:none;border-radius:14px;padding:14px 16px;font-size:.93rem}
+.msg.ok{background:#e3f6ea;color:#14532d;display:block}.msg.bad{background:#fde7e7;color:#7f1d1d;display:block}
+.msg .btn{margin-top:10px;background:#25d366;border-color:#25d366;color:#fff}
+.demo{font-size:.82rem;opacity:.85}
+/* contact */
+.info{list-style:none;padding:0;margin:0 0 20px;display:grid;gap:14px}
+.info li{display:flex;gap:12px;align-items:flex-start}.info .ico{color:var(--teal);margin-top:3px}
+.map{border-radius:22px;min-height:280px;border:1px dashed var(--teal);background:var(--soft);display:grid;place-items:center;text-align:center;padding:20px;font-size:.9rem}
+.map iframe{width:100%;height:320px;border:0;border-radius:22px}
+/* footer */
+footer{background:var(--navy);color:#b9d3e0;padding:56px 0 24px;font-size:.92rem}
+footer h4{color:#fff;margin:0 0 12px}footer ul{list-style:none;padding:0;margin:0;display:grid;gap:8px}
+footer a:hover{color:#7fe0e6}footer .logo{color:#fff}
+.fg{display:grid;gap:30px;grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+.copy{border-top:1px solid rgba(255,255,255,.15);margin-top:36px;padding-top:18px;text-align:center;font-size:.82rem}
+.wa{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));width:58px;height:58px;border-radius:50%;background:#25d366;color:#fff;display:grid;place-items:center;box-shadow:0 8px 22px rgba(0,0,0,.3);z-index:55;transition:.2s}
+.wa:hover{transform:scale(1.08)}.wa svg{width:30px;height:30px;fill:#fff}
+.rv{opacity:0;transform:translateY(18px);transition:.6s}.rv.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}.rv{opacity:1;transform:none}}
+</style>
 </head>
-
 <body>
+<header><div class="wrap nav">
+<a class="logo" href="#home" aria-label="Home"><span class="mark" data-ic="tooth"></span><span><span data-b="name">SmileCare</span><small data-b="tagline"></small></span></a>
+<nav id="nav" aria-label="Main"><ul>
+<li><a href="#home">Home</a></li><li><a href="#about">About</a></li><li><a href="#treatments">Treatments</a></li><li><a href="#team">Our Team</a></li><li><a href="#reviews">Reviews</a></li><li><a href="#contact">Contact</a></li></ul>
+<a class="btn p m" href="#book">Book an Appointment</a></nav>
+<a class="btn p" href="#book">Book an Appointment</a>
+<button class="burger" id="burger" aria-label="Open menu" aria-expanded="false"><svg class="ico" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+</div></header>
 
-  <!-- ===== HEADER / NAVIGATION ===== -->
-  <header>
-    <div class="nav-bar">
-      <a href="#home" class="logo">Deccan <span>Brew</span> Café</a>
-      <button class="menu-btn" id="menuBtn" aria-label="Open menu">☰</button>
-      <nav>
-        <ul id="navList">
-          <li><a href="#home">Home</a></li>
-          <li><a href="#menu">Menu</a></li>
-          <li><a href="#about">About</a></li>
-          <li><a href="#visit">Visit</a></li>
-          <li><a href="#enquire">Enquire</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
+<main>
+<section class="hero" id="home"><div class="wrap">
+<div>
+<span class="pill">Dental care in Hyderabad</span>
+<h1>A Healthier Smile <em>Starts Here.</em></h1>
+<p style="font-size:1.1rem;max-width:480px">Personalized dental care in a comfortable, welcoming environment.</p>
+<div class="cta"><a class="btn p" href="#book">Book an Appointment</a><a class="btn s" href="#treatments">Explore Our Treatments</a></div>
+<div class="trust"><span data-ic="heart">Patient-focused care</span><span data-ic="shield">Modern equipment</span><span data-ic="spark">Personalized treatment</span></div>
+</div>
+<div style="position:relative">
+<!-- PHOTO: replace this block with <img src="clinic.jpg" alt="Dentist treating a patient at SmileCare" loading="eager"> -->
+<div class="photo" role="img" aria-label="Placeholder for clinic photo"><svg class="t ico" viewBox="0 0 24 24" style="stroke-width:1"><use href="#tooth"/></svg><span class="tag">Clinic photo placeholder: replace with a real photo</span></div>
+<div class="float"><b style="color:var(--head)">Comfortable visits</b><br>Gentle, clearly explained care.</div>
+</div>
+</div></section>
 
-  <main>
-    <!-- ===== HERO ===== -->
-    <section class="hero" id="home">
-      <!-- A simple coffee cup drawn with SVG shapes (no image file needed) -->
-      <svg viewBox="0 0 120 120" aria-hidden="true">
-        <path d="M40 22 q-6 8 0 16 M60 18 q-6 8 0 16 M80 22 q-6 8 0 16" stroke="#e8a07e" stroke-width="4" fill="none" stroke-linecap="round"/>
-        <path d="M22 48 h66 v22 a26 26 0 0 1 -26 26 h-14 a26 26 0 0 1 -26 -26 z" fill="#c4623a"/>
-        <path d="M88 54 h8 a12 12 0 0 1 0 24 h-10" stroke="#c4623a" stroke-width="7" fill="none"/>
-        <ellipse cx="55" cy="48" rx="33" ry="5" fill="#3b2416"/>
-        <rect x="20" y="104" width="76" height="6" rx="3" fill="#fbf3e4" opacity=".6"/>
-      </svg>
-      <p class="tag">Hyderabad · Since 2015 (fictional)</p>
-      <h1>Deccan Brew Café</h1>
-      <p>Slow-brewed coffee, Irani chai and fresh bakes, served in the heart of Hyderabad.</p>
-      <div class="hero-buttons">
-        <a href="#menu" class="btn">See the Menu</a>
-        <a href="#visit" class="btn btn-outline">Find Us</a>
-      </div>
-    </section>
+<section class="dark" id="treatments"><div class="wrap">
+<div class="center"><span class="eyebrow">Our Treatments</span><h2>Comprehensive Dental Care for Your Whole Family</h2></div>
+<div class="grid g4" id="services"></div>
+</div></section>
 
-    <!-- ===== MENU ===== -->
-    <section id="menu">
-      <div class="container">
-        <h2 class="section-title">Our Menu</h2>
-        <p class="section-sub">Sample items and prices (fictional)</p>
+<section id="about"><div class="wrap two">
+<div class="photo sq" role="img" aria-label="Placeholder for clinic interior photo"><svg class="t ico" viewBox="0 0 24 24" style="stroke-width:1;width:30%"><use href="#tooth"/></svg><span class="tag">Clinic interior photo placeholder</span></div>
+<div>
+<span class="eyebrow">About the Clinic</span>
+<h2>Patient-first dentistry, close to home</h2>
+<p><span data-b="name"></span> is a dental clinic in Hyderabad focused on clear communication, comfortable visits and treatment plans built around each patient. Replace this text with your clinic's own story.</p>
+<div class="stats"><div class="stat"><b>[Years of experience]</b>placeholder</div><div class="stat"><b>[Dentist names]</b>placeholder</div><div class="stat"><b>[Qualifications]</b>placeholder</div></div>
+<span class="note">Placeholders: add only verified details.</span>
+</div></div></section>
 
-        <div class="menu-grid">
+<section class="soft" id="team"><div class="wrap">
+<div class="center"><span class="eyebrow">Our Team</span><h2>Meet Our Dentists</h2><span class="note">Sample profiles are placeholders until replaced with verified information.</span></div>
+<div class="grid g3 team" id="teamGrid"></div>
+</div></section>
 
-          <!-- One card. Copy this whole block to add a new menu item -->
-          <article class="card">
-            <div class="card-img">🍵</div>
-            <div class="card-body">
-              <div class="card-top"><h3>Irani Chai</h3><span class="price">₹40</span></div>
-              <p>Rich, creamy Hyderabadi-style tea brewed slowly.</p>
-            </div>
-          </article>
+<section><div class="wrap">
+<div class="center"><span class="eyebrow">Why Choose Us</span><h2>Care that feels easy</h2></div>
+<div class="grid g3" id="why"></div>
+</div></section>
 
-          <article class="card">
-            <div class="card-img">☕</div>
-            <div class="card-body">
-              <div class="card-top"><h3>Filter Coffee</h3><span class="price">₹60</span></div>
-              <p>Strong South Indian decoction with frothy milk.</p>
-            </div>
-          </article>
+<section class="mintbg" id="reviews"><div class="wrap">
+<div class="center"><span class="eyebrow">Patient Reviews</span><h2>What Our Patients Say</h2><span class="note">Sample placeholder reviews for development only. Not real patient feedback.</span></div>
+<div class="grid g3" id="revGrid"></div>
+</div></section>
 
-          <article class="card">
-            <div class="card-img">🧊</div>
-            <div class="card-body">
-              <div class="card-top"><h3>Deccan Cold Brew</h3><span class="price">₹140</span></div>
-              <p>Steeped for 12 hours, served over ice.</p>
-            </div>
-          </article>
+<section id="book"><div class="wrap two">
+<div>
+<span class="eyebrow">Appointments</span>
+<h2>Request an Appointment</h2>
+<p>Tell us what you need and we'll get back to you to confirm a time. Submitting this form does not confirm an appointment.</p>
+<p class="demo"><b>Demo mode:</b> this form is not connected to a server yet. After you submit, you can send the request by WhatsApp, which works right away.</p>
+</div>
+<form id="form" novalidate>
+<div class="row"><div><label for="n">Full name</label><input id="n" autocomplete="name" required><span class="err"></span></div>
+<div><label for="p">Phone number</label><input id="p" type="tel" inputmode="tel" autocomplete="tel" placeholder="98765 43210" required><span class="err"></span></div></div>
+<div><label for="t">Preferred treatment</label><select id="t" required></select><span class="err"></span></div>
+<div class="row"><div><label for="d">Preferred date</label><input id="d" type="date" required><span class="err"></span></div>
+<div><label for="h">Preferred time</label><select id="h" required><option value="">Select time</option><option>10 AM - 12 PM</option><option>12 PM - 3 PM</option><option>3 PM - 6 PM</option><option>6 PM - 8 PM</option></select><span class="err"></span></div></div>
+<div><label for="m">Message (optional)</label><textarea id="m" rows="3"></textarea></div>
+<button class="btn p" type="submit" style="justify-content:center">Submit Request</button>
+<div class="msg" id="msg" role="status" aria-live="polite"></div>
+</form>
+</div></section>
 
-          <article class="card">
-            <div class="card-img">🍪</div>
-            <div class="card-body">
-              <div class="card-top"><h3>Osmania Biscuits</h3><span class="price">₹50</span></div>
-              <p>Buttery sweet-salty biscuits, perfect with chai.</p>
-            </div>
-          </article>
+<section class="soft" id="contact"><div class="wrap two">
+<div>
+<span class="eyebrow">Contact</span><h2>Visit or get in touch</h2>
+<ul class="info">
+<li data-ic="pin"><span data-b="address"></span></li>
+<li data-ic="phone"><a data-b="phoneLink"></a></li>
+<li data-ic="mail"><a data-b="emailLink"></a></li>
+<li data-ic="clock"><span data-b="hours"></span></li></ul>
+<div class="cta" style="margin:0"><a class="btn p" id="callBtn">Call Now</a><a class="btn s" id="waBtn" target="_blank" rel="noopener">WhatsApp Us</a><a class="btn s" id="dirBtn" target="_blank" rel="noopener">Get Directions</a></div>
+</div>
+<div class="map" id="map"><div>Google Maps embed placeholder<br>Paste your embed URL in <b>CONFIG.mapEmbed</b></div></div>
+</div></section>
+</main>
 
-          <article class="card">
-            <div class="card-img">🍞</div>
-            <div class="card-body">
-              <div class="card-top"><h3>Bun Maska</h3><span class="price">₹70</span></div>
-              <p>Soft bun with fresh butter, a café classic.</p>
-            </div>
-          </article>
+<footer><div class="wrap">
+<div class="fg">
+<div><a class="logo" href="#home"><span class="mark" data-ic="tooth"></span><span><span data-b="name"></span><small data-b="tagline" style="color:#7fe0e6"></small></span></a></div>
+<div><h4>Quick links</h4><ul><li><a href="#home">Home</a></li><li><a href="#about">About</a></li><li><a href="#team">Our Team</a></li><li><a href="#reviews">Reviews</a></li><li><a href="#contact">Contact</a></li></ul></div>
+<div><h4>Services</h4><ul id="fServ"></ul></div>
+<div><h4>Contact</h4><ul><li data-b="phone"></li><li data-b="email"></li><li data-b="hours"></li></ul></div>
+</div>
+<div class="copy">&copy; <span id="yr"></span> <span data-b="name"></span>. All rights reserved. &nbsp;|&nbsp; <a href="#">Privacy Policy</a> (placeholder) &nbsp;|&nbsp; <a href="#">Terms</a> (placeholder)</div>
+</div></footer>
 
-          <article class="card">
-            <div class="card-img">🥐</div>
-            <div class="card-body">
-              <div class="card-top"><h3>Veg Puff</h3><span class="price">₹45</span></div>
-              <p>Flaky pastry filled with spiced vegetables.</p>
-            </div>
-          </article>
+<a class="wa" id="waFloat" target="_blank" rel="noopener" aria-label="Chat on WhatsApp"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.2 14c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.2-4.6-4-4.7-4.2-.1-.2-1.100-1.500-1.100-2.800s.7-2 1-2.300c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.9 2.100c.1.2.1.4 0 .5l-.4.6c-.1.2-.3.3-.1.600.2.300.8 1.300 1.700 2.100 1.100 1 2 1.300 2.300 1.400.3.100.4.100.6-.1l.8-1c.2-.3.4-.2.600-.1l2 1c.3.100.5.200.5.300.1.200.1.800-.1 1.400z"/></svg></a>
 
-          <article class="card">
-            <div class="card-img">🍫</div>
-            <div class="card-body">
-              <div class="card-top"><h3>Fudgy Brownie</h3><span class="price">₹120</span></div>
-              <p>Warm chocolate brownie with a dusting of cocoa.</p>
-            </div>
-          </article>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><path id="tooth" d="M7.5 3C5 3 3.500 5 3.500 7.500c0 4 2 5.500 2 9.500 0 2 .8 4 2 4s1.500-3.500 4.500-3.500 3.300 3.500 4.500 3.500 2-2 2-4c0-4 2-5.500 2-9.500C20.500 5 19 3 16.500 3 14 3 13.500 4 12 4S10 3 7.500 3z"/></defs></svg>
 
-          <article class="card">
-            <div class="card-img">🥛</div>
-            <div class="card-body">
-              <div class="card-top"><h3>Zafrani Latte</h3><span class="price">₹150</span></div>
-              <p>Espresso with milk and a hint of saffron.</p>
-            </div>
-          </article>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== ABOUT ===== -->
-    <section id="about">
-      <div class="container">
-        <h2 class="section-title">Our Story</h2>
-        <div class="about-text">
-          <p>Deccan Brew Café is a fictional neighbourhood café imagined for this portfolio project. It blends the warmth of old Hyderabad chai culture with the calm of a modern coffee house.</p>
-          <p>We picture a cosy space for long conversations, quiet reading and a good cup in your hand.</p>
-        </div>
-        <div class="features">
-          <div class="feature"><span>🌱</span><h3>Fresh Ingredients</h3><p>Made fresh every morning.</p></div>
-          <div class="feature"><span>☕</span><h3>Slow Brewed</h3><p>Patience in every cup.</p></div>
-          <div class="feature"><span>🛋️</span><h3>Cosy Space</h3><p>Comfortable seats and soft music.</p></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== HOURS + LOCATION ===== -->
-    <section id="visit">
-      <div class="container">
-        <h2 class="section-title">Visit Us</h2>
-        <p class="section-sub">We'd love to see you</p>
-        <div class="info-grid">
-          <div class="info-box">
-            <h3>Opening Hours</h3>
-            <div class="hours-row"><span>Monday – Friday</span><span>7:00 AM – 10:00 PM</span></div>
-            <div class="hours-row"><span>Saturday</span><span>7:00 AM – 11:00 PM</span></div>
-            <div class="hours-row"><span>Sunday</span><span>8:00 AM – 11:00 PM</span></div>
-          </div>
-          <div class="info-box">
-            <h3>Location</h3>
-            <p>Road No. 00, Banjara Hills,<br>Hyderabad, Telangana 500000<br><em>(placeholder address)</em></p>
-            <div class="map-placeholder">📍 Map placeholder: replace with your real Google Maps embed later</div>
-            <p style="margin-top:14px">
-              <a class="btn" href="https://www.google.com/maps/search/?api=1&query=Banjara+Hills+Hyderabad" target="_blank" rel="noopener">Open in Maps</a>
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== WHATSAPP ENQUIRY ===== -->
-    <section id="enquire">
-      <div class="container">
-        <h2 class="section-title">Questions or Bookings?</h2>
-        <p>Message us on WhatsApp about tables, events or orders.</p>
-        <!-- Replace 910000000000 with a real number: country code + number, no + or spaces -->
-        <a class="btn btn-whatsapp" id="waBtn"
-           href="https://wa.me/910000000000?text=Hello%20Deccan%20Brew%20Caf%C3%A9%2C%20I%20have%20an%20enquiry."
-           target="_blank" rel="noopener">💬 Chat on WhatsApp</a>
-      </div>
-    </section>
-  </main>
-
-  <!-- ===== FOOTER ===== -->
-  <footer>
-    <div class="footer-grid">
-      <div>
-        <h4>Deccan Brew Café</h4>
-        <p>A fictional café created for a web development portfolio.</p>
-      </div>
-      <div>
-        <h4>Contact</h4>
-        <p>📞 <a href="tel:+910000000000">+91 00000 00000</a></p>
-        <p>✉️ <a href="mailto:hello@deccanbrew.example">hello@deccanbrew.example</a></p>
-        <p>📍 Banjara Hills, Hyderabad</p>
-      </div>
-      <div>
-        <h4>Quick Links</h4>
-        <p><a href="#menu">Menu</a></p>
-        <p><a href="#about">About</a></p>
-        <p><a href="#visit">Visit</a></p>
-        <p><a href="#home">Back to top ↑</a></p>
-      </div>
-    </div>
-    <p class="copy">© <span id="year">2026</span> Deccan Brew Café. Fictional business for demonstration only.</p>
-  </footer>
-
-  <script>
-    // Get the menu button and the list of links
-    const menuBtn = document.getElementById("menuBtn");
-    const navList = document.getElementById("navList");
-
-    // Tapping the ☰ button shows or hides the menu
-    menuBtn.addEventListener("click", function () {
-      navList.classList.toggle("open");
-    });
-
-    // Tapping any link closes the menu again
-    navList.querySelectorAll("a").forEach(function (link) {
-      link.addEventListener("click", function () {
-        navList.classList.remove("open");
-      });
-    });
-
-    // Put the current year in the footer automatically
-    document.getElementById("year").textContent = new Date().getFullYear();
-  </script>
-
-</body>
-</html>
+<script>
+/* ===== EDIT YOUR CLINIC DETAILS HERE ===== */
+const CONFIG={
+ name:"SmileCare Dental Clinic", tagline:"Your Smile, Our Priority",
+ phone:"+91 98765 43210", whatsapp:"919876543210", /* WhatsApp: digits only, with country code */
+ email:"hello@example.com",
+ address:"[Clinic full address placeholder], Hyderabad, Telangana, India",
+ hours:"Mon-Sat, 10 AM-8 PM (placeholder)",
+ directionsUrl:"https://www.google.com/maps/search/?api=1&query=dental+clinic+Hyderabad",
+ mapEmbed:"" /* paste Google Maps embed src here */
+};
+const SERVICES=[
+ ["General Dentistry","tooth","Check-ups, fillings and routine care to keep your mouth healthy."],
+ ["Teeth Cleaning & Oral Hygiene","spark","Professional cleaning and guidance for everyday oral care."],
+ ["Teeth Whitening","spark","Brighten your smile with a treatment suited to your teeth."],
+ ["Dental Implants","implant","Replace missing teeth with a long-lasting, natural-looking option."],
+ ["Braces & Aligners","braces","Straighten teeth with options discussed to fit your needs."],
+ ["Root Canal Treatment","root","Gentle treatment to relieve pain and save an infected tooth."],
+ ["Crowns & Bridges","crown","Restore damaged or missing teeth for comfort and function."],
+ ["Pediatric Dentistry","child","Friendly, patient dental care for children."]];
+const TEAM=[
+ ["[Dentist Name 1]","[Qualification]","[Specialty]","Short bio placeholder. Add verified experience and approach to care."],
+ ["[Dentist Name 2]","[Qualification]","[Specialty]","Short bio placeholder. Add verified experience and approach to care."],
+ ["[Dentist Name 3]","[Qualification]","[Specialty]","Short bio placeholder. Add verified experience and approach to care."]];
+const WHY=[["heart","Comfort first","A calm, welcoming setting for every visit."],["chat","Clear communication","We explain every step and option before treatment."],["spark","Personalized plans","Treatment tailored to your needs and goals."],["cal","Easy booking","Request a visit online or by WhatsApp."],["shield","Hygiene practices","[Describe your verified sterilization and hygiene protocols]"]];
+const REVIEWS=["Sample review text. Replace with a real patient review (with permission).","Sample review text. Replace with a real patient review (with permission).","Sample review text. Replace with a real patient review (with permission)."];
+/* ========================================= */
+const P={tooth:'<use href="#tooth"/>',spark:'<path 
